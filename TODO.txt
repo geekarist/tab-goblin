@@ -1,6 +1,8 @@
 TODO:
-- Refactor after implementing load & save view
+- Update test: mock the way SavingService answers (success with a result or failure with an exception)
+- Rename SavingService to TabService
 - Implement saving to database
 
 DONE:
+- Refactor after implementing load & save view
 - Implement tablature load & save view (only 1 tab possible)

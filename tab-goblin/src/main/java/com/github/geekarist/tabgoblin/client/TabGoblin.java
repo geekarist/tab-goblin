@@ -4,25 +4,19 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.Widget;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class TabGoblin implements EntryPoint {
-
-	/**
-	 * Create a remote service proxy to talk to the server-side Greeting
-	 * service.
-	 */
-	private final SavingServiceAsync savingService = GWT.create(SavingService.class);
+	
+	private final SavingServiceAsync savingService;
 
 	private final Messages messages = GWT.create(Messages.class);
 
@@ -30,6 +24,14 @@ public class TabGoblin implements EntryPoint {
 	private Label resultMessageLabel;
 	private Button submitButton;
 	private Button loadButton;
+	
+	public TabGoblin() {
+		savingService = GWT.create(SavingService.class);
+	}
+
+	public TabGoblin(SavingServiceAsync savingService) {
+		this.savingService = savingService;
+	}
 
 	/**
 	 * This is the entry point method.
@@ -65,7 +67,7 @@ public class TabGoblin implements EntryPoint {
 
 					public void onFailure(Throwable caught) {
 						resultMessageLabel.setText(messages.resultLoadKo());
-						GWT.log("ko", caught);
+						GWT.log(messages.resultLoadKo(), caught);
 					}
 				});
 			}
@@ -79,12 +81,12 @@ public class TabGoblin implements EntryPoint {
 				savingService.save(tabContentsTextArea.getText(), new AsyncCallback<Integer>() {
 
 					public void onSuccess(Integer result) {
-						resultMessageLabel.setText(messages.resultOk("" + result));
+						resultMessageLabel.setText(messages.resultSubmitOk("" + result));
 					}
 
 					public void onFailure(Throwable caught) {
-						Window.alert("ko");
-						GWT.log("ko", caught);
+						resultMessageLabel.setText(messages.resultSubmitKo());
+						GWT.log(messages.resultSubmitKo(), caught);
 					}
 				});
 			}
@@ -103,7 +105,7 @@ public class TabGoblin implements EntryPoint {
 		return resultMessageLabel;
 	}
 
-	public Button getLoadButton() {
+	protected Button getLoadButton() {
 		return loadButton;
 	}
 }

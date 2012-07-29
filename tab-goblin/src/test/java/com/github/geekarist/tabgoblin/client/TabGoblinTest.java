@@ -8,9 +8,7 @@ import junit.framework.Assert;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import com.github.geekarist.tabgoblin.server.TablatureDao;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.gwt.test.GwtTest;
@@ -18,9 +16,6 @@ import com.googlecode.gwt.test.utils.WidgetUtils;
 import com.googlecode.gwt.test.utils.events.Browser;
 
 public class TabGoblinTest extends GwtTest {
-
-	@Autowired
-	TablatureDao tablatureDao;
 
 	@Before
 	public void setUp() throws Exception {
