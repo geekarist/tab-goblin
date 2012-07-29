@@ -1,0 +1,6 @@
+TODO:
+- Refactor after implementing load & save view
+- Implement saving to database
+
+DONE:
+- Implement tablature load & save view (only 1 tab possible)

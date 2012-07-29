@@ -1,10 +1,10 @@
 package com.github.geekarist.tabgoblin.client;
 
-import com.github.geekarist.tabgoblin.shared.Tablature;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
-@RemoteServiceRelativePath("filingService")
+@RemoteServiceRelativePath("savingService")
 public interface SavingService extends RemoteService {
-	public int save(Tablature tab);
+	int save(String tabContents);
+	String load();
 }
