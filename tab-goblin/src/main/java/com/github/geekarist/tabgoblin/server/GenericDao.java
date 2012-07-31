@@ -1,4 +1,4 @@
-package com.github.geekarist.tabgoblin.client;
+package com.github.geekarist.tabgoblin.server;
 
 import java.io.Serializable;
 import java.util.List;
