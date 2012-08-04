@@ -1,9 +1,11 @@
 TODO:
+- Implement generic dao read (see http://goo.gl/aqYcQ)
+- Implement generic dao create
+- Implement generic dao update
 - Rename SavingService to TabService
-- Create mocked dao implementation so it can be tested in ui
-- Implement saving to database with spring, hibernate and annotations
 
 DONE:
+- Setup berkeley db maven dependency (see http://goo.gl/1mUWf)
 - Refactor after implementing load & save view
 - Implement tablature load & save view (only 1 tab possible)
 - Update test: mock the way SavingService answers (success with a result or failure with an exception)

@@ -10,11 +10,13 @@ import com.github.geekarist.tabgoblin.client.TabGoblinTest;
 
 public class SavingServiceImplTest {
 
-	private static final Tablature TEST_TAB = new Tablature(0, TabGoblinTest.LABOHEME_TAB_CONTENTS);
-	private static final Tablature TEST_NEW_TAB = new Tablature(0, TabGoblinTest.LABOHEME_TAB_NEW_CONTENTS);
+	private Tablature TEST_TAB;
+	private Tablature TEST_NEW_TAB;
 
 	@Before
 	public void setUp() throws Exception {
+		TEST_TAB = new Tablature(0, TabGoblinTest.LABOHEME_TAB_CONTENTS);
+		TEST_NEW_TAB = new Tablature(0, TabGoblinTest.LABOHEME_TAB_NEW_CONTENTS);
 	}
 
 	@Test
