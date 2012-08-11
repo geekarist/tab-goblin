@@ -11,6 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.github.geekarist.tabgoblin.TabGoblinTestConstants;
 import com.github.geekarist.tabgoblin.shared.TabGoblinException;
 import com.sleepycat.je.Environment;
 import com.sleepycat.je.EnvironmentConfig;
@@ -21,40 +22,37 @@ import com.sleepycat.persist.StoreConfig;
 public class GenericDaoImplTest {
 
 	private static final String EXISTING_TAB_STORE = "target/tab-store";
-	private static final Integer EXISTING_TAB_ID = 99;
-	private static final String EXISTING_TAB_CONTENTS;
-
-	static {
-		try {
-			EXISTING_TAB_CONTENTS = FileUtils.readFileToString(new File("src/test/resources/laboheme.txt"));
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
+	private static final File EXISTING_TAB_STORE_HOME = new File(EXISTING_TAB_STORE);
 
 	@Before
 	public void setUp() throws Exception {
-		createBDB(EXISTING_TAB_STORE, false);
+		EntityStore entityStore = openStore();
+
+		PrimaryIndex<Integer, Tablature> tablatureById = entityStore.getPrimaryIndex(Integer.class, Tablature.class);
+		tablatureById.put(new Tablature(TabGoblinTestConstants.EXISTING_TAB_ID, TabGoblinTestConstants.LABOHEME_TAB_CONTENTS));
+
+		closeStore(entityStore);
 	}
 
-	private void createBDB(String tabStore, boolean readOnly) throws IOException {
+	private EntityStore openStore() {
 		EnvironmentConfig environmentConfig = new EnvironmentConfig();
-		environmentConfig.setReadOnly(readOnly);
-		environmentConfig.setAllowCreate(!readOnly);
+		environmentConfig.setReadOnly(false);
+		environmentConfig.setAllowCreate(!false);
 
 		StoreConfig storeConfig = new StoreConfig();
-		storeConfig.setReadOnly(readOnly);
-		storeConfig.setAllowCreate(!readOnly);
+		storeConfig.setReadOnly(false);
+		storeConfig.setAllowCreate(!false);
 
-		File home = new File(tabStore);
-		home.mkdir();
+		File home = new File(EXISTING_TAB_STORE);
+		home.mkdirs();
 
 		Environment environment = new Environment(home, environmentConfig);
 		EntityStore entityStore = new EntityStore(environment, "TabStore", storeConfig);
-		PrimaryIndex<Integer, Tablature> tablatureById = entityStore.getPrimaryIndex(Integer.class, Tablature.class);
+		return entityStore;
+	}
 
-		tablatureById.put(new Tablature(EXISTING_TAB_ID, EXISTING_TAB_CONTENTS));
-
+	private void closeStore(EntityStore entityStore) {
+		Environment environment = entityStore.getEnvironment();
 		entityStore.close();
 		environment.close();
 	}
@@ -72,7 +70,7 @@ public class GenericDaoImplTest {
 	public void testOpenExistingStore() {
 		GenericDao<Tablature, Integer> genericDaoImpl = //
 		new GenericDaoImpl<Tablature, Integer>( //
-				new File(EXISTING_TAB_STORE), false, Tablature.class, Integer.class);
+				EXISTING_TAB_STORE_HOME, false, Tablature.class, Integer.class);
 		genericDaoImpl.close();
 	}
 
@@ -80,7 +78,7 @@ public class GenericDaoImplTest {
 	public void testOpenExistingStoreReadOnly() throws IOException {
 		GenericDao<Tablature, Integer> genericDaoImpl = //
 		new GenericDaoImpl<Tablature, Integer>( //
-				new File(EXISTING_TAB_STORE), true, Tablature.class, Integer.class);
+				EXISTING_TAB_STORE_HOME, true, Tablature.class, Integer.class);
 		genericDaoImpl.close();
 	}
 
@@ -105,27 +103,57 @@ public class GenericDaoImplTest {
 	}
 
 	@Test
-	public void testReadExistingTab() throws IOException {
+	public void testGetExistingTab() throws IOException {
 		GenericDao<Tablature, Integer> dao = new GenericDaoImpl<Tablature, Integer>( //
-				new File(EXISTING_TAB_STORE), false, Tablature.class, Integer.class);
-		Tablature tab = dao.read(99);
-		Assert.assertEquals(EXISTING_TAB_ID, tab.getId());
-		Assert.assertEquals(EXISTING_TAB_CONTENTS, tab.getContents());
+				EXISTING_TAB_STORE_HOME, false, Tablature.class, Integer.class);
+		Tablature tab = dao.get(99);
+		Assert.assertEquals(TabGoblinTestConstants.EXISTING_TAB_ID, tab.getId());
+		Assert.assertEquals(TabGoblinTestConstants.LABOHEME_TAB_CONTENTS, tab.getContents());
 		dao.close();
 	}
 
 	@Test
-	public void testReadNonExistingTab() throws IOException {
+	public void testGetNonExistingTab() throws IOException {
 		GenericDao<Tablature, Integer> dao = new GenericDaoImpl<Tablature, Integer>( //
-				new File(EXISTING_TAB_STORE), false, Tablature.class, Integer.class);
-		Tablature tab = dao.read(98);
+				EXISTING_TAB_STORE_HOME, false, Tablature.class, Integer.class);
+		Tablature tab = dao.get(98);
 		Assert.assertNull(tab);
 		dao.close();
 	}
 
 	@Test
-	public void testCreate() throws IOException {
-		// TODO
+	public void testPutNewTab() throws IOException {
+		GenericDaoImpl<Tablature, Integer> dao = new GenericDaoImpl<Tablature, Integer>( //
+				EXISTING_TAB_STORE_HOME, false, Tablature.class, Integer.class);
+		dao.put(new Tablature(TabGoblinTestConstants.EXISTING_TAB_ID, TabGoblinTestConstants.LABOHEME_TAB_CONTENTS));
+		dao.close();
+
+		Tablature actual = loadTab(TabGoblinTestConstants.EXISTING_TAB_ID);
+		Assert.assertEquals(TabGoblinTestConstants.EXISTING_TAB_ID, actual.getId());
+		Assert.assertEquals(TabGoblinTestConstants.LABOHEME_TAB_CONTENTS, actual.getContents());
+	}
+
+	@Test
+	public void testPutModifiedExistingTab() throws IOException {
+		GenericDaoImpl<Tablature, Integer> dao = new GenericDaoImpl<Tablature, Integer>( //
+				EXISTING_TAB_STORE_HOME, false, Tablature.class, Integer.class);
+
+		Tablature tab = loadTab(TabGoblinTestConstants.EXISTING_TAB_ID);
+		tab.setContents(TabGoblinTestConstants.LABOHEME_TAB_NEW_CONTENTS);
+		dao.put(tab);
+		dao.close();
+
+		Tablature actual = loadTab(TabGoblinTestConstants.EXISTING_TAB_ID);
+		Assert.assertEquals(TabGoblinTestConstants.EXISTING_TAB_ID, actual.getId());
+		Assert.assertEquals(TabGoblinTestConstants.LABOHEME_TAB_NEW_CONTENTS, actual.getContents());
+	}
+
+	private Tablature loadTab(Integer existingTabId) {
+		EntityStore entityStore = openStore();
+		PrimaryIndex<Integer, Tablature> primaryIndex = entityStore.getPrimaryIndex(Integer.class, Tablature.class);
+		Tablature tablature = primaryIndex.get(existingTabId);
+		closeStore(entityStore);
+		return tablature;
 	}
 
 }

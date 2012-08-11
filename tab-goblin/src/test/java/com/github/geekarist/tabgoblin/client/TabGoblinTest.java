@@ -1,32 +1,19 @@
 package com.github.geekarist.tabgoblin.client;
 
-import java.io.File;
 import java.io.IOException;
 
 import junit.framework.Assert;
 
-import org.apache.commons.io.FileUtils;
 import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.github.geekarist.tabgoblin.TabGoblinTestConstants;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.googlecode.gwt.test.GwtTest;
 import com.googlecode.gwt.test.utils.events.Browser;
 
 public class TabGoblinTest extends GwtTest {
-
-	public static final String LABOHEME_TAB_CONTENTS;
-	public static final String LABOHEME_TAB_NEW_CONTENTS;
-
-	static {
-		try {
-			LABOHEME_TAB_CONTENTS = FileUtils.readFileToString(new File("src/test/resources/laboheme.txt"));
-			LABOHEME_TAB_NEW_CONTENTS = FileUtils.readFileToString(new File("src/test/resources/laboheme2.txt"));
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
 
 	@Before
 	public void setUp() throws Exception {
@@ -36,13 +23,13 @@ public class TabGoblinTest extends GwtTest {
 	public void testSubmitWithSavingSuccessful() throws IllegalArgumentException, IOException {
 		// Setup /////////
 		SavingServiceAsync savingServiceMock = EasyMock.createMock(SavingServiceAsync.class);
-		expectSaveAndCallbackOnSuccess(savingServiceMock, LABOHEME_TAB_CONTENTS, 943);
+		expectSaveAndCallbackOnSuccess(savingServiceMock, TabGoblinTestConstants.LABOHEME_TAB_CONTENTS, 943);
 		EasyMock.replay(savingServiceMock);
 
 		// Test /////////
 		TabGoblin tabGoblin = new TabGoblin(savingServiceMock);
 		tabGoblin.onModuleLoad();
-		Browser.fillText(tabGoblin.getTabContentsTextArea(), LABOHEME_TAB_CONTENTS);
+		Browser.fillText(tabGoblin.getTabContentsTextArea(), TabGoblinTestConstants.LABOHEME_TAB_CONTENTS);
 		Browser.click(tabGoblin.getSubmitButton());
 
 		// Assert ///////////
@@ -54,13 +41,14 @@ public class TabGoblinTest extends GwtTest {
 	public void testSubmitWithSavingKo() throws IllegalArgumentException, IOException {
 		// Setup /////////
 		SavingServiceAsync savingServiceMock = EasyMock.createMock(SavingServiceAsync.class);
-		expectSaveAndCallbackOnFailure(savingServiceMock, LABOHEME_TAB_CONTENTS, new Exception("Error message"));
+		expectSaveAndCallbackOnFailure(savingServiceMock, TabGoblinTestConstants.LABOHEME_TAB_CONTENTS, new Exception(
+				"Error message"));
 		EasyMock.replay(savingServiceMock);
 
 		// Test /////////
 		TabGoblin tabGoblin = new TabGoblin(savingServiceMock);
 		tabGoblin.onModuleLoad();
-		Browser.fillText(tabGoblin.getTabContentsTextArea(), LABOHEME_TAB_CONTENTS);
+		Browser.fillText(tabGoblin.getTabContentsTextArea(), TabGoblinTestConstants.LABOHEME_TAB_CONTENTS);
 		Browser.click(tabGoblin.getSubmitButton());
 
 		// Assert ///////////
@@ -72,7 +60,7 @@ public class TabGoblinTest extends GwtTest {
 	public void testLoadWithLoadingSuccessful() throws IllegalArgumentException, IOException {
 		// Setup /////////
 		SavingServiceAsync savingServiceMock = EasyMock.createMock(SavingServiceAsync.class);
-		expectLoadAndCallbackOnSuccess(savingServiceMock, LABOHEME_TAB_CONTENTS);
+		expectLoadAndCallbackOnSuccess(savingServiceMock, TabGoblinTestConstants.LABOHEME_TAB_CONTENTS);
 		EasyMock.replay(savingServiceMock);
 
 		// Test /////////
@@ -83,7 +71,7 @@ public class TabGoblinTest extends GwtTest {
 		// Assert ///////////
 		EasyMock.verify(savingServiceMock);
 		Assert.assertEquals("Tablature has been loaded successfully.", tabGoblin.getResultMessageLabel().getText());
-		Assert.assertEquals(LABOHEME_TAB_CONTENTS, tabGoblin.getTabContentsTextArea().getText());
+		Assert.assertEquals(TabGoblinTestConstants.LABOHEME_TAB_CONTENTS, tabGoblin.getTabContentsTextArea().getText());
 	}
 
 	@Test
@@ -110,6 +98,7 @@ public class TabGoblinTest extends GwtTest {
 		EasyMock.expectLastCall().andDelegateTo(new SavingServiceAsync() {
 			public void save(String tabContents, AsyncCallback<Integer> callback) {
 			}
+
 			public void load(AsyncCallback<String> callback) {
 				callback.onFailure(exception);
 			}
@@ -122,7 +111,7 @@ public class TabGoblinTest extends GwtTest {
 		EasyMock.expectLastCall().andDelegateTo(new SavingServiceAsync() {
 			public void save(String tabContents, AsyncCallback<Integer> callback) {
 			}
-			
+
 			public void load(AsyncCallback<String> callback) {
 				callback.onSuccess(labohemeTabContents);
 			}

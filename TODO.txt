@@ -1,10 +1,12 @@
 TODO:
-- Implement generic dao create
-- Implement generic dao update
 - Rename SavingService to TabService
+- Create failing tab goblin integration test
+- Fix integration test
+- Use configuration file for berkeley db parameters
 
 DONE:
-- Refactor generic dao and make its implementation generic
+- Implement generic dao put
+- Refactor dao and make its implementation generic
 - Search for continuous integration service (http://goo.gl/yKcl9)
 - Implement generic dao read
 - Read bdb dpl quick start 1/4 (http://goo.gl/72jBx)

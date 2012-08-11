@@ -2,7 +2,6 @@ package com.github.geekarist.tabgoblin.server;
 
 import java.io.File;
 import java.io.Serializable;
-import java.util.List;
 
 import com.github.geekarist.tabgoblin.shared.TabGoblinException;
 import com.sleepycat.je.DatabaseException;
@@ -53,28 +52,12 @@ public class GenericDaoImpl<T, PK extends Serializable> implements GenericDao<T,
 		}
 	}
 
-	public PK create(T newInstance) {
-		// TODO Auto-generated method stub
-		return null;
+	public void put(T newInstance) {
+		objectById.put(newInstance);
 	}
 
-	public T read(PK id) {
+	public T get(PK id) {
 		return objectById.get(id);
-	}
-
-	public List<T> readAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void update(T transientObject) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void delete(T persistentObject) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

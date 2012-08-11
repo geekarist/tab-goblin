@@ -6,7 +6,7 @@ import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.github.geekarist.tabgoblin.client.TabGoblinTest;
+import com.github.geekarist.tabgoblin.TabGoblinTestConstants;
 
 public class SavingServiceImplTest {
 
@@ -15,8 +15,8 @@ public class SavingServiceImplTest {
 
 	@Before
 	public void setUp() throws Exception {
-		TEST_TAB = new Tablature(0, TabGoblinTest.LABOHEME_TAB_CONTENTS);
-		TEST_NEW_TAB = new Tablature(0, TabGoblinTest.LABOHEME_TAB_NEW_CONTENTS);
+		TEST_TAB = new Tablature(0, TabGoblinTestConstants.LABOHEME_TAB_CONTENTS);
+		TEST_NEW_TAB = new Tablature(0, TabGoblinTestConstants.LABOHEME_TAB_NEW_CONTENTS);
 	}
 
 	@Test
@@ -24,7 +24,7 @@ public class SavingServiceImplTest {
 		// Setup
 		@SuppressWarnings("unchecked")
 		GenericDao<Tablature, Integer> daoMock = EasyMock.createMock(GenericDao.class);
-		expectRead(daoMock, 0, TEST_TAB);
+		expectGet(daoMock, 0, TEST_TAB);
 		EasyMock.replay(daoMock);
 
 		// Test
@@ -33,7 +33,7 @@ public class SavingServiceImplTest {
 
 		// Assert
 		EasyMock.verify(daoMock);
-		Assert.assertEquals(TabGoblinTest.LABOHEME_TAB_CONTENTS, tabContents);
+		Assert.assertEquals(TabGoblinTestConstants.LABOHEME_TAB_CONTENTS, tabContents);
 	}
 
 	@Test
@@ -41,13 +41,13 @@ public class SavingServiceImplTest {
 		// Setup
 		@SuppressWarnings("unchecked")
 		GenericDao<Tablature, Integer> daoMock = EasyMock.createMock(GenericDao.class);
-		expectRead(daoMock, 0, null);
-		expectCreate(daoMock, TEST_TAB, 0);
+		expectGet(daoMock, 0, null);
+		expectCreate(daoMock, TEST_TAB);
 		EasyMock.replay(daoMock);
 
 		// Test
 		SavingServiceImpl savingServiceImpl = new SavingServiceImpl(daoMock);
-		int resultId = savingServiceImpl.save(TabGoblinTest.LABOHEME_TAB_CONTENTS);
+		int resultId = savingServiceImpl.save(TabGoblinTestConstants.LABOHEME_TAB_CONTENTS);
 
 		// Assert
 		EasyMock.verify(daoMock);
@@ -59,31 +59,31 @@ public class SavingServiceImplTest {
 		// Setup
 		@SuppressWarnings("unchecked")
 		GenericDao<Tablature, Integer> daoMock = EasyMock.createMock(GenericDao.class);
-		expectRead(daoMock, 0, TEST_TAB);
-		expectUpdate(daoMock, TEST_NEW_TAB);
+		expectGet(daoMock, 0, TEST_TAB);
+		expectPut(daoMock, TEST_NEW_TAB);
 		EasyMock.replay(daoMock);
 
 		// Test
 		SavingServiceImpl savingServiceImpl = new SavingServiceImpl(daoMock);
-		int resultId1 = savingServiceImpl.save(TabGoblinTest.LABOHEME_TAB_NEW_CONTENTS);
+		int resultId1 = savingServiceImpl.save(TabGoblinTestConstants.LABOHEME_TAB_NEW_CONTENTS);
 
 		// Assert
 		EasyMock.verify(daoMock);
 		Assert.assertEquals(0, resultId1);
 	}
 
-	private void expectUpdate(GenericDao<Tablature, Integer> daoMock, Tablature tab) {
-		daoMock.update(EasyMock.eq(tab));
+	private void expectPut(GenericDao<Tablature, Integer> daoMock, Tablature tab) {
+		daoMock.put(EasyMock.eq(tab));
 		EasyMock.expectLastCall();
 	}
 
-	private void expectCreate(GenericDao<Tablature, Integer> daoMock, Tablature tab, int id) {
-		daoMock.create(EasyMock.eq(tab));
-		EasyMock.expectLastCall().andReturn(id);
+	private void expectCreate(GenericDao<Tablature, Integer> daoMock, Tablature tab) {
+		daoMock.put(EasyMock.eq(tab));
+		EasyMock.expectLastCall();
 	}
 
-	private void expectRead(GenericDao<Tablature, Integer> daoMock, int id, Tablature tab) {
-		daoMock.read(EasyMock.eq(id));
+	private void expectGet(GenericDao<Tablature, Integer> daoMock, int id, Tablature tab) {
+		daoMock.get(EasyMock.eq(id));
 		EasyMock.expectLastCall().andReturn(tab);
 	}
 
