@@ -70,13 +70,17 @@ public class GenericDaoImplTest {
 
 	@Test
 	public void testOpenExistingStore() {
-		GenericDao<Tablature, Integer> genericDaoImpl = new GenericDaoImpl(new File(EXISTING_TAB_STORE), false);
+		GenericDao<Tablature, Integer> genericDaoImpl = //
+		new GenericDaoImpl<Tablature, Integer>( //
+				new File(EXISTING_TAB_STORE), false, Tablature.class, Integer.class);
 		genericDaoImpl.close();
 	}
 
 	@Test
 	public void testOpenExistingStoreReadOnly() throws IOException {
-		GenericDao<Tablature, Integer> genericDaoImpl = new GenericDaoImpl(new File(EXISTING_TAB_STORE), true);
+		GenericDao<Tablature, Integer> genericDaoImpl = //
+		new GenericDaoImpl<Tablature, Integer>( //
+				new File(EXISTING_TAB_STORE), true, Tablature.class, Integer.class);
 		genericDaoImpl.close();
 	}
 
@@ -84,7 +88,8 @@ public class GenericDaoImplTest {
 	public void testOpenNonExistingStore() throws IOException {
 		GenericDao<Tablature, Integer> dao = null;
 		try {
-			dao = new GenericDaoImpl(new File("target/non-existing-store"), false);
+			dao = new GenericDaoImpl<Tablature, Integer>( //
+					new File("target/non-existing-store"), false, Tablature.class, Integer.class);
 		} catch (TabGoblinException e) {
 			Assert.assertEquals("Error while creating dao environment", e.getMessage());
 			Throwable cause = e.getCause();
@@ -101,7 +106,8 @@ public class GenericDaoImplTest {
 
 	@Test
 	public void testReadExistingTab() throws IOException {
-		GenericDao<Tablature, Integer> dao = new GenericDaoImpl(new File(EXISTING_TAB_STORE), false);
+		GenericDao<Tablature, Integer> dao = new GenericDaoImpl<Tablature, Integer>( //
+				new File(EXISTING_TAB_STORE), false, Tablature.class, Integer.class);
 		Tablature tab = dao.read(99);
 		Assert.assertEquals(EXISTING_TAB_ID, tab.getId());
 		Assert.assertEquals(EXISTING_TAB_CONTENTS, tab.getContents());
@@ -110,7 +116,8 @@ public class GenericDaoImplTest {
 
 	@Test
 	public void testReadNonExistingTab() throws IOException {
-		GenericDao<Tablature, Integer> dao = new GenericDaoImpl(new File(EXISTING_TAB_STORE), false);
+		GenericDao<Tablature, Integer> dao = new GenericDaoImpl<Tablature, Integer>( //
+				new File(EXISTING_TAB_STORE), false, Tablature.class, Integer.class);
 		Tablature tab = dao.read(98);
 		Assert.assertNull(tab);
 		dao.close();

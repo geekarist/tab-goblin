@@ -1,6 +1,7 @@
 package com.github.geekarist.tabgoblin.server;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.List;
 
 import com.github.geekarist.tabgoblin.shared.TabGoblinException;
@@ -11,13 +12,13 @@ import com.sleepycat.persist.EntityStore;
 import com.sleepycat.persist.PrimaryIndex;
 import com.sleepycat.persist.StoreConfig;
 
-public class GenericDaoImpl implements GenericDao<Tablature, Integer> {
+public class GenericDaoImpl<T, PK extends Serializable> implements GenericDao<T, PK> {
 
 	private Environment environment;
 	private EntityStore entityStore;
-	private PrimaryIndex<Integer, Tablature> tablatureById;
+	private PrimaryIndex<PK, T> objectById;
 
-	public GenericDaoImpl(File home, boolean readOnly) {
+	public GenericDaoImpl(File home, boolean readOnly, Class<T> persistentClass, Class<PK> primaryKeyClass) {
 		EnvironmentConfig environmentConfig = new EnvironmentConfig();
 		environmentConfig.setReadOnly(readOnly);
 		environmentConfig.setAllowCreate(!readOnly);
@@ -25,14 +26,14 @@ public class GenericDaoImpl implements GenericDao<Tablature, Integer> {
 		StoreConfig storeConfig = new StoreConfig();
 		storeConfig.setReadOnly(readOnly);
 		storeConfig.setAllowCreate(!readOnly);
-		
+
 		try {
 			environment = new Environment(home, environmentConfig);
 		} catch (IllegalArgumentException e) {
 			throw new TabGoblinException("Error while creating dao environment", e);
 		}
 		entityStore = new EntityStore(environment, "TabStore", storeConfig);
-		tablatureById = entityStore.getPrimaryIndex(Integer.class, Tablature.class);
+		objectById = entityStore.getPrimaryIndex(primaryKeyClass, persistentClass);
 	}
 
 	public void close() {
@@ -52,26 +53,26 @@ public class GenericDaoImpl implements GenericDao<Tablature, Integer> {
 		}
 	}
 
-	public Integer create(Tablature newInstance) {
+	public PK create(T newInstance) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public Tablature read(Integer id) {
-		return tablatureById.get(id);
+	public T read(PK id) {
+		return objectById.get(id);
 	}
 
-	public List<Tablature> readAll() {
+	public List<T> readAll() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public void update(Tablature transientObject) {
+	public void update(T transientObject) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void delete(Tablature persistentObject) {
+	public void delete(T persistentObject) {
 		// TODO Auto-generated method stub
 
 	}
