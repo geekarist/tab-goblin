@@ -1,10 +1,9 @@
 package com.github.geekarist.tabgoblin.shared;
 
-import java.io.IOException;
 
 public class TabGoblinException extends RuntimeException {
 
-	public TabGoblinException(String string, IOException e) {
+	public TabGoblinException(String string, Exception e) {
 		super(string, e);
 	}
 

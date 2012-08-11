@@ -1,14 +1,16 @@
 TODO:
-- Read bdb dpl quick start 1/4 (http://goo.gl/72jBx)
-- Read bdb dpl quick start 2/4 (http://goo.gl/el7Dd)
-- Read bdb dpl quick start 3/4 (http://goo.gl/TjrTo)
-- Read bdb dpl quick start 4/4 (http://goo.gl/7CMYZ)
-- Implement generic dao read
+- Search for continuous integration service
+- Refactor generic dao and make its implementation generic
 - Implement generic dao create
 - Implement generic dao update
 - Rename SavingService to TabService
 
 DONE:
+- Implement generic dao read
+- Read bdb dpl quick start 1/4 (http://goo.gl/72jBx)
+- Read bdb dpl quick start 2/4 (http://goo.gl/el7Dd)
+- Read bdb dpl quick start 3/4 (http://goo.gl/TjrTo)
+- Read bdb dpl quick start 4/4 (http://goo.gl/7CMYZ)
 - Print bdb direct persistence layer quick start (see http://goo.gl/mqcgD)
 - Setup berkeley db maven dependency (see http://goo.gl/1mUWf)
 - Refactor after implementing load & save view
