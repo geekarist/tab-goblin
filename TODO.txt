@@ -1,10 +1,15 @@
 TODO:
+- Setup gwt project using maven: 'use web toolkit'
+- Setup gwt compilation prefs: ignore 'incorrect build output directory' and 'missing sdk' errors
 - Rename SavingService to TabService
 - Create failing tab goblin integration test (http://goo.gl/1jt4l)
 - Fix integration test
 - Use configuration file for berkeley db parameters
 
 DONE:
+- Test using eclipse google developer plugin for gwt hosted mode (http://goo.gl/c9ECC)
+- Test eclipse-shell for scripting gwt launch configurations (http://goo.gl/o24Hv)
+- Test sikuli for scripting gwt launch configurations (http://sikuli.org/)
 - Implement generic dao put
 - Refactor dao and make its implementation generic
 - Search for continuous integration service (http://goo.gl/yKcl9)

@@ -4,3 +4,7 @@
 /tab-goblin/.settings
 /tab-goblin/target
 /tab-goblin/.classpath
+/tab-goblin/src/main/gwt-unitCache
+/tab-goblin/src/main/webapp/TabGoblin
+/tab-goblin/src/main/webapp/WEB-INF/lib
+/tab-goblin/src/main/webapp/WEB-INF/deploy
