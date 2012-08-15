@@ -1,12 +1,13 @@
 TODO:
-- Setup gwt project using maven: 'use web toolkit'
 - Setup gwt compilation prefs: ignore 'incorrect build output directory' and 'missing sdk' errors
 - Rename SavingService to TabService
 - Create failing tab goblin integration test (http://goo.gl/1jt4l)
 - Fix integration test
 - Use configuration file for berkeley db parameters
+- Setup github credentials
 
 DONE:
+- Setup gwt project using maven: 'use web toolkit' (http://goo.gl/nwIgi)
 - Test using eclipse google developer plugin for gwt hosted mode (http://goo.gl/c9ECC)
 - Test eclipse-shell for scripting gwt launch configurations (http://goo.gl/o24Hv)
 - Test sikuli for scripting gwt launch configurations (http://sikuli.org/)
