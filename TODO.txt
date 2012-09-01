@@ -1,4 +1,5 @@
 TODO:
+- Install google plugin for eclipse 3.7
 - Setup gwt compilation prefs: ignore 'incorrect build output directory' and 'missing sdk' errors
 - Rename SavingService to TabService
 - Create failing tab goblin integration test (http://goo.gl/1jt4l)
